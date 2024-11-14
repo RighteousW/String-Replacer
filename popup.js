@@ -37,24 +37,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to add a replacement item to the list
   function addReplacementToList(original, replacement) {
-    const li = document.createElement("li");
-    li.textContent = `"${original}" → "${replacement}"`;
-    li.style.marginBottom = "5px";
+    const list = document.getElementById("replacementList");
 
-    // Create Edit and Delete buttons
+    // Create the surrounding container for each set of strings
+    const replacementContainer = document.createElement("div");
+    replacementContainer.className = "replacement-container";
+
+    // Top div: Original and Replacement strings
+    const topDiv = document.createElement("div");
+    topDiv.className = "replacement-top";
+    topDiv.innerHTML = `<strong>Original:</strong> ${original}<br><strong>Replacement:</strong> ${replacement}`;
+
+    // Bottom div: Action buttons
+    const bottomDiv = document.createElement("div");
+    bottomDiv.className = "replacement-bottom";
+
     const editButton = document.createElement("button");
     editButton.textContent = "Edit";
-    editButton.style.marginLeft = "10px";
-    editButton.addEventListener("click", () => editReplacement(original, replacement, li));
+    editButton.className = "edit-btn";
+    editButton.addEventListener("click", () => editReplacement(original, replacement, list));
 
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "Delete";
-    deleteButton.style.marginLeft = "5px";
-    deleteButton.addEventListener("click", () => deleteReplacement(original, li));
+    deleteButton.className = "delete-btn";
+    deleteButton.addEventListener("click", () => deleteReplacement(original, list));
 
-    li.appendChild(editButton);
-    li.appendChild(deleteButton);
-    replacementList.appendChild(li);
+    // Append buttons to bottom div
+    bottomDiv.appendChild(editButton);
+    bottomDiv.appendChild(deleteButton);
+
+    // Append top and bottom divs to the replacement container
+    replacementContainer.appendChild(topDiv);
+    replacementContainer.appendChild(bottomDiv);
+
+    // Append the replacement container to the list
+    list.appendChild(replacementContainer);
   }
 
   // Function to handle editing a replacement
@@ -80,5 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
         listItem.remove();
       });
     });
+    chrome.location.reload();
   }
 });
